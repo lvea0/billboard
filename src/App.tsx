@@ -483,7 +483,6 @@ function App() {
                   </tbody>
                 </table>
               </div>
-            </main>
 
             {/* Информация о выбранных конструкциях */}
             {selectedConstructions.length > 0 && (
@@ -1197,7 +1196,7 @@ function App() {
           <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <p className="text-gray-700">Это общая таблица со списком всех клиентов.</p>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );
