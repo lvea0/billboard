@@ -20,7 +20,8 @@ const BillboardLogo = () => (
 );
 
 function App() {
-  const [currentView, setCurrentView] = useState('list'); // 'list', 'add', 'occupancy'
+  const [currentView, setCurrentView] = useState('list'); // 'list', 'add', 'occupancy', 'construction-detail'
+  const [selectedConstructionId, setSelectedConstructionId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     companyName: '',
     legalAddress: '',
@@ -39,7 +40,6 @@ function App() {
     'июл 2025': '', 'авг 2025': '', 'сен 2025': '', 'окт 2025': '', 'ноя 2025': '', 'дек 2025': ''
   });
 
-  // Данные для сетки занятости
   const constructionsData = [
     {
       id: 1,
@@ -50,16 +50,20 @@ function App() {
       address: 'Шоссейная ул.',
       side: 'А',
       category: 'МТС',
-      material: 'Савушкин',
-      occupancy: { 'янв 2025': 'МТС', 'фев 2025': 'Савушкин', 'мар 2025': 'А1', 'май 2025': 'КФС',
-        '06.2022': 'МТС',
-        '07.2022': 'Савушкин',
-        '08.2022': 'А1',
-        '09.2022': '',
-        '10.2022': '',
-        '11.2022': '',
-        '12.2022': '',
-        '01.2023': ''
+      printMaterial: 'Баннер',
+      occupancy: {
+        'янв 2025': 'МТС',
+        'фев 2025': 'Савушкин',
+        'мар 2025': 'А1',
+        'апр 2025': '',
+        'май 2025': 'КФС',
+        'июн 2025': '',
+        'июл 2025': '',
+        'авг 2025': '',
+        'сен 2025': '',
+        'окт 2025': '',
+        'ноя 2025': '',
+        'дек 2025': ''
       }
     },
     {
@@ -71,16 +75,20 @@ function App() {
       address: 'Железнодорожная ул. - Ленина ул. (по паспорту Заслонова ул. - Ленина ул.)',
       side: 'В',
       category: 'ФСН',
-      material: 'МТС',
-      occupancy: { 'фев 2025': 'ФСЗн', 'мар 2025': 'МТС', 'апр 2025': 'МТС', 'июн 2025': 'А1',
-        '06.2022': 'ФСН',
-        '07.2022': 'МТС',
-        '08.2022': 'МТС',
-        '09.2022': '',
-        '10.2022': '',
-        '11.2022': '',
-        '12.2022': '',
-        '01.2023': ''
+      printMaterial: 'Пленка',
+      occupancy: {
+        'янв 2025': '',
+        'фев 2025': 'ФСН',
+        'мар 2025': 'МТС',
+        'апр 2025': 'МТС',
+        'май 2025': '',
+        'июн 2025': 'А1',
+        'июл 2025': '',
+        'авг 2025': '',
+        'сен 2025': '',
+        'окт 2025': '',
+        'ноя 2025': '',
+        'дек 2025': ''
       }
     },
     {
@@ -92,16 +100,20 @@ function App() {
       address: 'Молодежная ул., 166',
       side: 'В',
       category: 'А1',
-      material: 'М1',
-      occupancy: { 'мар 2025': 'А1', 'апр 2025': 'М1', 'май 2025': 'М1', 'июл 2025': 'Савушкин',
-        '06.2022': 'А1',
-        '07.2022': 'М1',
-        '08.2022': 'М1',
-        '09.2022': '',
-        '10.2022': '',
-        '11.2022': '',
-        '12.2022': '',
-        '01.2023': ''
+      printMaterial: 'Баннер',
+      occupancy: {
+        'янв 2025': '',
+        'фев 2025': '',
+        'мар 2025': 'А1',
+        'апр 2025': 'М1',
+        'май 2025': 'М1',
+        'июн 2025': '',
+        'июл 2025': 'Савушкин',
+        'авг 2025': '',
+        'сен 2025': '',
+        'окт 2025': '',
+        'ноя 2025': '',
+        'дек 2025': ''
       }
     },
     {
@@ -113,16 +125,20 @@ function App() {
       address: 'Кгаторова ул. - Блохина ул.',
       side: 'В',
       category: 'МЧС',
-      material: 'МЧС',
-      occupancy: { 'апр 2025': 'МЧС', 'май 2025': 'МЧС', 'июн 2025': 'КФС', 'авг 2025': 'МТС',
-        '06.2022': 'МЧС',
-        '07.2022': 'МЧС',
-        '08.2022': 'КFC',
-        '09.2022': '',
-        '10.2022': '',
-        '11.2022': '',
-        '12.2022': '',
-        '01.2023': ''
+      printMaterial: 'Сетка',
+      occupancy: {
+        'янв 2025': '',
+        'фев 2025': '',
+        'мар 2025': '',
+        'апр 2025': 'МЧС',
+        'май 2025': 'МЧС',
+        'июн 2025': 'КФС',
+        'июл 2025': '',
+        'авг 2025': 'МТС',
+        'сен 2025': '',
+        'окт 2025': '',
+        'ноя 2025': '',
+        'дек 2025': ''
       }
     }
   ];
@@ -197,16 +213,25 @@ function App() {
     setShowClientForm(true);
   };
 
-  const months = ['06.2022', '07.2022', '08.2022', '09.2022', '10.2022', '11.2022', '12.2022', '01.2023'];
-  const monthNames = {
-    '06.2022': 'июнь 2022',
-    '07.2022': 'июль 2022', 
-    '08.2022': 'август 2022',
-    '09.2022': 'сентябрь 2022',
-    '10.2022': 'октябрь 2022',
-    '11.2022': 'ноябрь 2022',
-    '12.2022': 'декабрь 2022',
-    '01.2023': 'январь 2023'
+  const months = ['янв 2025', 'фев 2025', 'мар 2025', 'апр 2025', 'май 2025', 'июн 2025', 'июл 2025', 'авг 2025', 'сен 2025', 'окт 2025', 'ноя 2025', 'дек 2025'];
+  const monthNames: Record<string, string> = {
+    'янв 2025': 'январь 2025',
+    'фев 2025': 'февраль 2025',
+    'мар 2025': 'март 2025',
+    'апр 2025': 'апрель 2025',
+    'май 2025': 'май 2025',
+    'июн 2025': 'июнь 2025',
+    'июл 2025': 'июль 2025',
+    'авг 2025': 'август 2025',
+    'сен 2025': 'сентябрь 2025',
+    'окт 2025': 'октябрь 2025',
+    'ноя 2025': 'ноябрь 2025',
+    'дек 2025': 'декабрь 2025'
+  };
+
+  const handleConstructionClick = (id: number) => {
+    setSelectedConstructionId(id);
+    setCurrentView('construction-detail');
   };
 
   if (currentView === 'occupancy') {
@@ -400,21 +425,6 @@ function App() {
                         className="rounded"
                       />
                     </th>
-                      {months.map((month, index) => (
-                        <th key={index} className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div className="mb-1">{month}</div>
-                            <select className="text-xs border rounded px-1 py-0.5 bg-white">
-                              <option>Все</option>
-                              <option>МТС</option>
-                              <option>А1</option>
-                              <option>Савушкин</option>
-                              <option>ФСН</option>
-                              <option>М1</option>
-                              <option>МЧС</option>
-                              <option>KFC</option>
-                            </select>
-                        </th>
-                      ))}
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Свет</th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Город</th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Формат</th>
@@ -422,6 +432,7 @@ function App() {
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-80">Адресная программа</th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Сторона</th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Категория</th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Материал печати</th>
                       {months.map(month => (
                         <th key={month} className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-24">
                           <div className="flex flex-col items-center">
@@ -439,8 +450,8 @@ function App() {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {constructionsData.map((construction) => (
-                      <tr 
-                        key={construction.id} 
+                      <tr
+                        key={construction.id}
                         className={`hover:bg-gray-50 ${selectedConstructions.includes(construction.id) ? 'bg-blue-50' : ''}`}
                       >
                         <td className="px-3 py-4">
@@ -455,11 +466,15 @@ function App() {
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{construction.city}</td>
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{construction.format}</td>
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{construction.type}</td>
-                        <td className="px-3 py-4 text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
+                        <td
+                          className="px-3 py-4 text-sm text-blue-600 hover:text-blue-800 cursor-pointer hover:underline"
+                          onClick={() => handleConstructionClick(construction.id)}
+                        >
                           {construction.address}
                         </td>
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{construction.side}</td>
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{construction.category}</td>
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{construction.printMaterial}</td>
                         {months.map(month => (
                           <td key={month} className="px-3 py-4 text-center text-xs">
                             <div className={`px-2 py-1 rounded text-white text-xs ${
@@ -538,11 +553,157 @@ function App() {
     );
   }
 
+  if (currentView === 'construction-detail' && selectedConstructionId) {
+    const construction = constructionsData.find(c => c.id === selectedConstructionId);
+
+    if (!construction) {
+      setCurrentView('occupancy');
+      return null;
+    }
+
+    return (
+      <div className="min-h-screen bg-gray-50 flex">
+        <aside className="w-64 bg-green-900 text-white flex-shrink-0">
+          <div className="p-6 border-b border-green-800">
+            <BillboardLogo />
+          </div>
+
+          <nav className="mt-8">
+            <div className="px-4">
+              <div className="flex items-center justify-between py-3 px-4 bg-green-800 rounded-lg mb-2">
+                <div className="flex items-center space-x-3">
+                  <Menu className="w-5 h-5" />
+                  <span className="font-medium">Конструкции</span>
+                </div>
+                <ChevronDown className="w-4 h-4" />
+              </div>
+            </div>
+          </nav>
+        </aside>
+
+        <div className="flex-1 flex flex-col">
+          <header className="bg-white border-b border-gray-200 px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <span>Application</span>
+                <span>•</span>
+                <span>Dashboard</span>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="pl-10 pr-4 py-2 bg-gray-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <div className="relative">
+                  <Bell className="w-6 h-6 text-gray-600" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                    <User className="w-5 h-5 text-gray-600" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <main className="flex-1 p-6">
+            <div className="mb-6 flex items-center space-x-4">
+              <button
+                onClick={() => setCurrentView('occupancy')}
+                className="flex items-center text-gray-600 hover:text-gray-900"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Назад к сводной таблице
+              </button>
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-8">
+              <h1 className="text-2xl font-bold text-gray-900 mb-8">Детали конструкции</h1>
+
+              <div className="grid grid-cols-2 gap-6 mb-8">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Адрес</label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-900">{construction.address}</div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Город</label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-900">{construction.city}</div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Формат</label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-900">{construction.format}</div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Тип конструкции</label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-900">{construction.type}</div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Сторона</label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-900">{construction.side}</div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Свет</label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-900">{construction.light}</div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Категория</label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-900">{construction.category}</div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Материал печати</label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-900">{construction.printMaterial}</div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Сетка занятости на 2025 год</h2>
+                <div className="grid grid-cols-4 gap-4">
+                  {months.map(month => (
+                    <div key={month} className="border border-gray-200 rounded p-3">
+                      <div className="text-sm font-medium text-gray-700 mb-2">{monthNames[month]}</div>
+                      <div className={`px-3 py-2 rounded text-white text-sm text-center ${
+                        construction.occupancy[month]
+                          ? construction.occupancy[month] === 'МТС' ? 'bg-red-500'
+                            : construction.occupancy[month] === 'А1' ? 'bg-orange-500'
+                            : construction.occupancy[month] === 'Савушкин' ? 'bg-green-500'
+                            : construction.occupancy[month] === 'ФСН' ? 'bg-blue-500'
+                            : construction.occupancy[month] === 'М1' ? 'bg-purple-500'
+                            : construction.occupancy[month] === 'МЧС' ? 'bg-yellow-600'
+                            : construction.occupancy[month] === 'КФС' ? 'bg-red-600'
+                            : 'bg-gray-500'
+                          : 'bg-gray-200 text-gray-400'
+                      }`}>
+                        {construction.occupancy[month] || 'Свободно'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
   const clientsData = [
     {
       id: 1,
       name: 'ООО Рога и Шерсть',
-      category: 'Питание', 
+      category: 'Питание',
       manager: 'Иванова Ирина',
       contact: 'Ирина Лебеденко',
       phone: '+ 375 123 123 123'
