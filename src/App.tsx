@@ -334,9 +334,9 @@ function App() {
             {/* Навигационные вкладки */}
             <div className="mb-6">
               <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg inline-flex">
-                <button 
+                <button
                   onClick={() => setCurrentView('list')}
-                  className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md"
+                  className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md clickable-page-link"
                 >
                   Клиенты
                 </button>
@@ -346,8 +346,8 @@ function App() {
                 <button className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md">
                   Конструкции
                 </button>
-                <button className="px-6 py-2 bg-white text-gray-900 rounded-md font-medium shadow-sm">
-                  Сводная Таблица
+                <button className="px-6 py-2 bg-white text-gray-900 rounded-md font-medium shadow-sm clickable-page-link">
+                  Адресная программа
                 </button>
                 <button className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md">
                   Настройки
@@ -467,7 +467,7 @@ function App() {
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{construction.format}</td>
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{construction.type}</td>
                         <td
-                          className="px-3 py-4 text-sm text-blue-600 hover:text-blue-800 cursor-pointer hover:underline"
+                          className="px-3 py-4 text-sm text-blue-600 hover:text-blue-800 cursor-pointer hover:underline clickable-page-link"
                           onClick={() => handleConstructionClick(construction.id)}
                         >
                           {construction.address}
@@ -619,7 +619,7 @@ function App() {
                 className="flex items-center text-gray-600 hover:text-gray-900"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
-                Назад к сводной таблице
+                Назад к адресной программе
               </button>
             </div>
 
@@ -834,9 +834,9 @@ function App() {
             {/* Навигационные вкладки */}
             <div className="mb-6">
               <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg inline-flex">
-                <button 
+                <button
                   onClick={() => setCurrentView('list')}
-                  className="px-6 py-2 bg-white text-gray-900 rounded-md font-medium shadow-sm"
+                  className="px-6 py-2 bg-white text-gray-900 rounded-md font-medium shadow-sm clickable-page-link"
                 >
                   Клиенты
                 </button>
@@ -846,8 +846,8 @@ function App() {
                 <button className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md">
                   Конструкции
                 </button>
-                <button className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md">
-                  Сводная Таблица
+                <button className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md clickable-page-link">
+                  Адресная программа
                 </button>
                 <button className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md">
                   Настройки
@@ -1266,9 +1266,9 @@ function App() {
           {/* Навигационные вкладки */}
           <div className="mb-6">
             <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg inline-flex">
-              <button 
+              <button
                 onClick={() => setCurrentView('occupancy')}
-                className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md"
+                className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md clickable-page-link"
               >
                 Клиенты
               </button>
@@ -1278,11 +1278,11 @@ function App() {
               <button className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md">
                 Конструкции
               </button>
-              <button 
+              <button
                 onClick={() => setCurrentView('occupancy')}
-                className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md"
+                className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md clickable-page-link"
               >
-                Сводная Таблица
+                Адресная программа
               </button>
               <button className="px-6 py-2 text-gray-600 hover:text-gray-900 rounded-md">
                 Настройки
